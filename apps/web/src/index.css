@@ -2075,6 +2075,18 @@ code {
   animation: preview-loading-progress 5.3s cubic-bezier(0.1, 0.5, 0.2, 1) forwards;
 }
 
+/* Status dots pulse and ping forever. Hold them still for reduced motion; the
+   ping is only a halo, so it hides instead of freezing mid-burst. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-status-pulse {
+    animation: none;
+  }
+  .animate-status-ping {
+    animation: none;
+    visibility: hidden;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .preview-loading-progress,
   .preview-loading-progress[data-loading="true"] {
