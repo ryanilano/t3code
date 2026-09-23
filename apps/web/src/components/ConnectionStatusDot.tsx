@@ -60,7 +60,7 @@ export function ConnectionStatusDot({
     <button
       type="button"
       aria-label={tooltipText}
-      className="relative flex size-3 shrink-0 cursor-help items-center justify-center rounded-full outline-hidden"
+      className="relative flex size-3 shrink-0 cursor-help items-center justify-center rounded-full outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background"
     >
       {dotContent}
     </button>
