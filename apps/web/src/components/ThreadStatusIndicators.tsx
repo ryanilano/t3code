@@ -441,6 +441,7 @@ export function ThreadStatusLabel({
         <TooltipTrigger
           render={
             <span
+              role="img"
               aria-label={status.label}
               className={`inline-flex size-3.5 shrink-0 items-center justify-center ${status.colorClass}`}
             />
@@ -462,6 +463,7 @@ export function ThreadStatusLabel({
       <TooltipTrigger
         render={
           <span
+            role="img"
             aria-label={status.label}
             className={`inline-flex items-center gap-1 text-[10px] ${status.colorClass}`}
           />
