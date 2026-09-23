@@ -342,7 +342,7 @@ function ComposerBannerStackAlert({
   }
   return (
     <ComposerBanner.Root
-      role="alert"
+      role={item.variant === "error" || item.variant === "warning" ? "alert" : "status"}
       placement={attached ? "attached" : "floating"}
       variant={item.variant}
       density="comfortable"
