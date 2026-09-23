@@ -26,9 +26,6 @@ import { toastManager } from "./ui/toast";
 export function ThreadNotificationCoordinator() {
   const { environments } = useEnvironments();
   const mode = useClientSettings((settings) => settings.notificationMode);
-  const inAppNotificationsEnabled = useClientSettings(
-    (settings) => settings.inAppNotificationsEnabled,
-  );
   const pending = useRef(
     new Map<string, { environmentId: EnvironmentId; notification: Notification }>(),
   );
@@ -76,8 +73,8 @@ export function ThreadNotificationCoordinator() {
     };
   }, [mode]);
 
-  if (mode === "off" && !inAppNotificationsEnabled) return null;
-
+  // Always mounted: the open thread's status line below is not a notification
+  // setting, it is the only text a screen reader gets when a turn ends.
   return environments.map((environment) => (
     <EnvironmentNotifications
       key={environment.environmentId}
@@ -106,6 +103,7 @@ function EnvironmentNotifications({
   const previous = useRef(
     new Map<ThreadId, { attention: string | null; completion: number | null }>(),
   );
+  const announcer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (shell.status !== "live" || Option.isNone(shell.snapshot)) {
@@ -145,6 +143,15 @@ function EnvironmentNotifications({
             : status === "failed"
               ? "Thread failed"
               : "Input needed";
+      if (activeEnvironmentId === environmentId && activeThreadId === thread.id) {
+        // The open thread gets no toast or desktop notification, so say it here.
+        // Written to the DOM directly, like the sound and toast side effects beside it:
+        // clearing first makes a repeated message re-announce.
+        if (announcer.current) {
+          announcer.current.textContent = "";
+          announcer.current.textContent = `${title}: ${thread.title}`;
+        }
+      }
       if (hasNotificationSound(mode)) {
         void playNotificationSound(kind, () =>
           hasNotificationSound(getClientSettings().notificationMode),
@@ -233,5 +240,5 @@ function EnvironmentNotifications({
     shell,
   ]);
 
-  return null;
+  return <div ref={announcer} role="status" className="sr-only" />;
 }
