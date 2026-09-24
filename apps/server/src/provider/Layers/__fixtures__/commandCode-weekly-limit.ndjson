@@ -1,0 +1,8 @@
+{"type":"event","event":{"type":"run_start","sessionId":"e28c4188-f81d-47c8-a93a-3c98d131c00e"}}
+{"type":"event","event":{"type":"turn_start","turnNumber":1}}
+{"type":"event","event":{"type":"message_start"}}
+{"type":"event","event":{"type":"model_request_start","model":"deepseek/deepseek-v4-flash"}}
+{"type":"event","event":{"type":"model_trace","traceId":"88fdf286783948485cd86923244cd07c"}}
+{"type":"event","event":{"type":"run_error","error":{"name":"TransportError","message":"POST /alpha/generate → 429 error: You've reached your weekly usage limit for your plan. Your limit resets at 2026-09-27T03:42:11.675Z. Please wait for the window to reset or upgrade your plan to continue."}}}
+{"type":"event","event":{"type":"run_end","result":{"finalText":"","stopReason":"run_error","turnCount":1,"usage":{"inputTokens":0,"outputTokens":0,"cacheReadTokens":0,"cacheWriteTokens":0},"systemPromptTokens":null,"nextState":{"sessionId":"e28c4188-f81d-47c8-a93a-3c98d131c00e","messages":[{"role":"user","content":[{"type":"text","text":"Reply with exactly the word PONG and nothing else. Do not use any tools."}],"meta":{"source":"user","createdAt":1790220607130,"messageId":"db07ccc8-f08c-406a-b209-a901e06012cd"}}],"interrupted":false,"modState":{"workspace":{"cwd":"/private/tmp/cc-smoke","platform":"darwin","branch":null,"gitStatus":"?? run1.ndjson\n?? run1.stderr","recentCommits":[],"additionalDirectories":[]}}}}}}
+{"type":"result","subtype":"error","sessionId":"e28c4188-f81d-47c8-a93a-3c98d131c00e","usage":{"inputTokens":0,"outputTokens":0,"cacheReadTokens":0,"cacheWriteTokens":0},"durationMs":1660,"finalText":"","error":"Error: You've reached your weekly usage limit. Resets in 3d (Sat 11:42 PM). Run /upgrade for a higher plan or /extra for on-demand credits."}

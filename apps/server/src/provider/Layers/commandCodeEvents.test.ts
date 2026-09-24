@@ -1,4 +1,6 @@
 import * as NodeAssert from "node:assert/strict";
+import * as NodeFs from "node:fs";
+import * as NodePath from "node:path";
 
 import { EventId, type ProviderRuntimeEvent, ThreadId, TurnId } from "@t3tools/contracts";
 import { describe, it } from "vite-plus/test";
@@ -331,5 +333,20 @@ describe("translateCommandCodeLine", () => {
     const payload = terminal(events);
     NodeAssert.equal(payload.state, "failed");
     NodeAssert.equal(payload.errorMessage, "boom");
+  });
+
+  it("fails a real weekly-limit run (captured 2026-09-23, exit 5) with the CLI's own message", () => {
+    const lines = NodeFs.readFileSync(
+      NodePath.join(import.meta.dirname, "__fixtures__", "commandCode-weekly-limit.ndjson"),
+      "utf8",
+    )
+      .split("\n")
+      .filter((line) => line.length > 0);
+    const { events, state } = run(lines, { exitCode: 5, interruptRequested: false });
+    NodeAssert.equal(state.sessionId, "e28c4188-f81d-47c8-a93a-3c98d131c00e");
+    const payload = terminal(events);
+    NodeAssert.equal(payload.state, "failed");
+    NodeAssert.match(payload.errorMessage ?? "", /rate limited/);
+    NodeAssert.match(payload.errorMessage ?? "", /weekly usage limit/);
   });
 });
