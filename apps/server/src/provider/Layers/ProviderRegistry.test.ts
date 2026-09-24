@@ -2643,6 +2643,7 @@ it.layer(Layer.mergeAll(NodeServices.layer, ServerSettingsModule.layerTest(), Te
               assert.deepStrictEqual(providers.map((provider) => provider.instanceId).toSorted(), [
                 "antigravity",
                 "claudeAgent",
+                "codePuppy",
                 "codex",
                 "cursor",
                 "grok",
