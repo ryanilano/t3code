@@ -1,6 +1,7 @@
 import {
   AntigravitySettings,
   ClaudeSettings,
+  CodePuppySettings,
   CodexSettings,
   CursorSettings,
   GrokSettings,
@@ -11,6 +12,7 @@ import type * as Schema from "effect/Schema";
 import {
   AntigravityIcon,
   ClaudeAI,
+  CodePuppyIcon,
   CursorIcon,
   GrokIcon,
   type Icon,
@@ -81,6 +83,13 @@ const PROVIDER_CLIENT_DEFINITIONS: readonly ProviderClientDefinition[] = [
     label: "Antigravity",
     icon: AntigravityIcon,
     settingsSchema: AntigravitySettings,
+  },
+  {
+    value: ProviderDriverKind.make("codePuppy"),
+    label: "Code Puppy",
+    icon: CodePuppyIcon,
+    badgeLabel: "Early Access",
+    settingsSchema: CodePuppySettings,
   },
 ];
 
