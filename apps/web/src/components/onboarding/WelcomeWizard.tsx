@@ -593,7 +593,7 @@ function PairingForm({
           <div
             id="onboarding-pairing-error"
             role="alert"
-            className="rounded-lg border border-destructive/30 bg-destructive/6 px-3 py-2 text-sm text-destructive"
+            className="rounded-lg border border-destructive/30 bg-destructive/6 px-3 py-2 text-sm text-destructive-foreground"
           >
             {errorMessage}
           </div>

@@ -336,7 +336,7 @@ export function AddProviderInstanceDialog({
               aria-invalid={showInstanceIdError}
             />
             {showInstanceIdError ? (
-              <span className="text-2xs text-destructive">{instanceIdError}</span>
+              <span className="text-2xs text-destructive-foreground">{instanceIdError}</span>
             ) : (
               <span className="text-2xs text-muted-foreground">
                 Routing key used by threads and sessions. Letters, digits, '-', or '_'.

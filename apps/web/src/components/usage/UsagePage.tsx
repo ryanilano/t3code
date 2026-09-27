@@ -1084,7 +1084,7 @@ function UsageEnvironmentFilter({
                     <span
                       className={cn(
                         "shrink-0 text-xs text-muted-foreground",
-                        environment.error !== null && "text-destructive",
+                        environment.error !== null && "text-destructive-foreground",
                       )}
                     >
                       {status}

@@ -198,7 +198,7 @@ function SourceStatusBadge({
         tone === "neutral" && "border-border/70 bg-muted/45 text-muted-foreground",
         tone === "default" && "border-success/25 bg-success/10 text-success-foreground",
         tone === "warning" && "border-warning/30 bg-warning/10 text-warning-foreground",
-        tone === "danger" && "border-destructive/30 bg-destructive/10 text-destructive",
+        tone === "danger" && "border-destructive/30 bg-destructive/10 text-destructive-foreground",
       )}
     >
       <span
@@ -257,7 +257,7 @@ function IconStat({
         className={cn(
           "mt-2.5 truncate font-mono text-2xl font-semibold tracking-tighter tabular-nums text-foreground",
           tone === "warning" && "text-warning-foreground",
-          tone === "danger" && "text-destructive",
+          tone === "danger" && "text-destructive-foreground",
         )}
       >
         {value}
@@ -1052,7 +1052,7 @@ export function ResourceTelemetryDiagnostics({
             />
           </div>
           {telemetry.error ? (
-            <div className="flex items-start gap-2 border-t border-destructive/20 bg-destructive/5 px-4 py-3 text-xs text-destructive sm:px-5">
+            <div className="flex items-start gap-2 border-t border-destructive/20 bg-destructive/5 px-4 py-3 text-xs text-destructive-foreground sm:px-5">
               <AlertTriangleIcon className="mt-0.5 size-3.5 shrink-0" />
               <span>{telemetry.error}</span>
             </div>
@@ -1143,7 +1143,7 @@ export function ResourceTelemetryDiagnostics({
                   valueClassName={
                     snapshot.power.thermalState === "serious" ||
                     snapshot.power.thermalState === "critical"
-                      ? "text-destructive"
+                      ? "text-destructive-foreground"
                       : undefined
                   }
                 />
@@ -1230,7 +1230,7 @@ export function ResourceTelemetryDiagnostics({
       >
         <div className="overflow-hidden rounded-2xl border border-border/70 bg-card shadow-xs/5">
           {history.error ? (
-            <div className="flex items-start gap-2 border-b border-destructive/20 bg-destructive/5 px-4 py-3 text-xs text-destructive sm:px-5">
+            <div className="flex items-start gap-2 border-b border-destructive/20 bg-destructive/5 px-4 py-3 text-xs text-destructive-foreground sm:px-5">
               <AlertTriangleIcon className="mt-0.5 size-3.5 shrink-0" />
               <span>{history.error}</span>
             </div>

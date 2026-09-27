@@ -344,7 +344,7 @@ export function ThemeSearchSection({
       {error ? (
         <div
           aria-live="polite"
-          className="rounded-xl border border-destructive/30 bg-destructive/5 px-3 py-2 text-destructive text-sm"
+          className="rounded-xl border border-destructive/30 bg-destructive/5 px-3 py-2 text-destructive-foreground text-sm"
         >
           {error}
         </div>

@@ -113,7 +113,7 @@ export function PairingRouteSurface({
         </div>
 
         {errorMessage ? (
-          <div className="rounded-lg border border-destructive/30 bg-destructive/6 px-3 py-2 text-sm text-destructive">
+          <div className="rounded-lg border border-destructive/30 bg-destructive/6 px-3 py-2 text-sm text-destructive-foreground">
             {errorMessage}
           </div>
         ) : null}
@@ -230,7 +230,7 @@ export function HostedPairingRouteSurface() {
       ) : null}
 
       {status === "error" ? (
-        <div className="mt-5 rounded-lg border border-destructive/30 bg-destructive/6 px-3 py-2 text-sm text-destructive">
+        <div className="mt-5 rounded-lg border border-destructive/30 bg-destructive/6 px-3 py-2 text-sm text-destructive-foreground">
           Verify the backend is reachable from this browser, supports CORS for hosted clients, and
           is served over HTTPS when opening this page from HTTPS.
         </div>

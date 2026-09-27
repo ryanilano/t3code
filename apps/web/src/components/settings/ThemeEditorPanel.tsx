@@ -1240,7 +1240,7 @@ export function ThemeEditorPanel({
             {/* Inline and above the color list: the panel scrolls, and an
                 error parked below every role would go unseen. */}
             {error ? (
-              <p aria-live="polite" className="text-sm text-destructive">
+              <p aria-live="polite" className="text-sm text-destructive-foreground">
                 {error}
               </p>
             ) : null}

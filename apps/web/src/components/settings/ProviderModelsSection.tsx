@@ -628,7 +628,7 @@ export function ProviderModelsSection({
       ) : null}
 
       {driverKind !== "antigravity" && error ? (
-        <p className="mt-2 text-xs text-destructive">{error}</p>
+        <p className="mt-2 text-xs text-destructive-foreground">{error}</p>
       ) : null}
     </div>
   );

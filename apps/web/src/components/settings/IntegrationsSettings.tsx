@@ -738,7 +738,7 @@ function DeviceIntegrationControls({
           ) : null}
         </div>
         {updateError?.tool === tool ? (
-          <p role="alert" className="text-xs text-destructive">
+          <p role="alert" className="text-xs text-destructive-foreground">
             {updateError.message}
           </p>
         ) : null}
@@ -1359,7 +1359,7 @@ function BrowserProfilesSetting({ disabled }: { readonly disabled: boolean }) {
               you close them.
             </AlertDialogDescription>
             {profileRemovalError ? (
-              <p aria-live="polite" className="text-sm text-destructive">
+              <p aria-live="polite" className="text-sm text-destructive-foreground">
                 {profileRemovalError}
               </p>
             ) : null}

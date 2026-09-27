@@ -96,7 +96,7 @@ const PENDING_EXPIRY_MS = 6 * 60_000;
 function rowToneClass(kind: ProviderUpdateRowStatusKind): string {
   switch (kind) {
     case "failed":
-      return "text-destructive";
+      return "text-destructive-foreground";
     case "unchanged":
       return "text-warning-foreground";
     case "success":

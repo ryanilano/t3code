@@ -668,7 +668,7 @@ function WhenExpressionBuilder({
           ) : null}
         </InputGroup>
         {parseError ? (
-          <div className="flex items-center gap-1.5 text-2xs text-destructive">
+          <div className="flex items-center gap-1.5 text-2xs text-destructive-foreground">
             <CircleXIcon className="size-3.5" />
             {parseError}
           </div>
@@ -698,7 +698,7 @@ function WhenExpressionBuilder({
           </div>
         )}
         {parseError ? (
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-lg border border-destructive/30 bg-background/75 p-4 text-center text-xs text-destructive backdrop-blur-xs">
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-lg border border-destructive/30 bg-background/75 p-4 text-center text-xs text-destructive-foreground backdrop-blur-xs">
             Fix the expression above to continue editing visually.
           </div>
         ) : null}

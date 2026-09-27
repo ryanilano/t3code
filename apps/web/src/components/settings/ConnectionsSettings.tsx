@@ -1195,7 +1195,9 @@ const AuthorizedClientsHeaderAction = memo(function AuthorizedClientsHeaderActio
                 ))}
               </div>
               {pairingScopes.length === 0 ? (
-                <p className="text-xs text-destructive">Select at least one permission.</p>
+                <p className="text-xs text-destructive-foreground">
+                  Select at least one permission.
+                </p>
               ) : pairingScopes.includes(AuthAccessWriteScope) ? (
                 <p className="text-xs text-warning-foreground">
                   This client can create or revoke access for other devices.
@@ -1577,7 +1579,10 @@ function SavedBackendListRow({
               <span
                 className={cn(
                   "block truncate",
-                  enabled && status.tone === "error" && !resumingServerUpdate && "text-destructive",
+                  enabled &&
+                    status.tone === "error" &&
+                    !resumingServerUpdate &&
+                    "text-destructive-foreground",
                 )}
               />
             }
@@ -2690,7 +2695,9 @@ export function ConnectionsSettings() {
   const renderRemoteModeBody = () => (
     <div className="space-y-4">
       {renderRemoteFields()}
-      {savedBackendError ? <p className="text-xs text-destructive">{savedBackendError}</p> : null}
+      {savedBackendError ? (
+        <p className="text-xs text-destructive-foreground">{savedBackendError}</p>
+      ) : null}
       <Button
         variant="outline"
         className="w-full"
@@ -2808,7 +2815,7 @@ export function ConnectionsSettings() {
           </label>
         </div>
         {savedBackendError || discoveredSshHostsError ? (
-          <div className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-xs text-destructive">
+          <div className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-xs text-destructive-foreground">
             {savedBackendError ?? discoveredSshHostsError}
           </div>
         ) : null}
@@ -3034,7 +3041,7 @@ export function ConnectionsSettings() {
           <SettingsRow
             {...searchableSetting("wsl-backend")}
             description="Couldn't load the WSL backend state."
-            status={<span className="block text-destructive">{desktopWslError}</span>}
+            status={<span className="block text-destructive-foreground">{desktopWslError}</span>}
             control={
               <Button
                 size="sm"
@@ -3067,7 +3074,7 @@ export function ConnectionsSettings() {
           description="WSL is unavailable, so Windows is running instead. Turn WSL off to clear this preference."
           status={
             desktopWslError ? (
-              <span className="block text-destructive">{desktopWslError}</span>
+              <span className="block text-destructive-foreground">{desktopWslError}</span>
             ) : null
           }
           control={
@@ -3105,9 +3112,9 @@ export function ConnectionsSettings() {
           description="Run the selected WSL distro alongside Windows. Projects remain on their current filesystem."
           status={
             desktopWslError ? (
-              <span className="block text-destructive">{desktopWslError}</span>
+              <span className="block text-destructive-foreground">{desktopWslError}</span>
             ) : desktopWslState.preflightError ? (
-              <span className="block text-destructive">
+              <span className="block text-destructive-foreground">
                 WSL backend couldn't start: {desktopWslState.preflightError}
               </span>
             ) : null
@@ -3199,7 +3206,7 @@ export function ConnectionsSettings() {
     <>
       {desktopAccessManagementError ? (
         <div className={accessRowClassName(presentation)}>
-          <p className="text-xs text-destructive">{desktopAccessManagementError}</p>
+          <p className="text-xs text-destructive-foreground">{desktopAccessManagementError}</p>
         </div>
       ) : null}
       <PairingClientsList
@@ -3244,7 +3251,7 @@ export function ConnectionsSettings() {
       }
       status={
         desktopServerExposureError ? (
-          <span className="block text-destructive">{desktopServerExposureError}</span>
+          <span className="block text-destructive-foreground">{desktopServerExposureError}</span>
         ) : null
       }
       control={renderNetworkAccessToggle()}
@@ -3638,7 +3645,9 @@ export function ConnectionsSettings() {
                   />
                 </label>
                 {!isTailscaleServePortValid ? (
-                  <p className="mt-2 text-xs text-destructive">Enter a port from 1 to 65535.</p>
+                  <p className="mt-2 text-xs text-destructive-foreground">
+                    Enter a port from 1 to 65535.
+                  </p>
                 ) : null}
                 <div className="rounded-md border border-border/70 bg-muted/20 px-3 py-2">
                   <p className="text-xs font-medium text-muted-foreground">HTTPS endpoint</p>

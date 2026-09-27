@@ -1520,7 +1520,7 @@ describe("MessagesTimeline", () => {
     expect(markup).toContain("Ran 2 commands");
     expect(markup).toContain("lucide-terminal");
     expect(markup).not.toContain("lucide-x");
-    expect(markup).not.toContain("text-destructive");
+    expect(markup).not.toContain("text-destructive-foreground");
     // The failure stays discoverable for screen readers.
     expect(markup).toContain("tool call failed");
   });
@@ -2193,7 +2193,7 @@ describe("MessagesTimeline", () => {
 
     expect(markup).toContain('aria-label="Received 1 update and used 1 tool, tool call failed"');
     // Ordinary tool failures do not use destructive row styling.
-    expect(markup).not.toContain("text-destructive");
+    expect(markup).not.toContain("text-destructive-foreground");
   });
 
   it("keeps the red treatment for severe orchestration failures", () => {
@@ -2229,7 +2229,7 @@ describe("MessagesTimeline", () => {
     );
 
     expect(markup).toContain("lucide-circle-alert");
-    expect(markup).toContain("text-destructive");
+    expect(markup).toContain("text-destructive-foreground");
   });
 
   it("only withholds an expanded tool-call label click while text is selected", async () => {

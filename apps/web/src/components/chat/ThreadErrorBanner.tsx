@@ -73,7 +73,7 @@ export const ThreadErrorBanner = memo(function ThreadErrorBanner({
             {chatGptUsageLimit ? <ChatGptUsageButton variant="default" size="sm" /> : null}
             {onDismiss ? (
               <Button variant="ghost" size="icon-xs" aria-label="Dismiss error" onClick={onDismiss}>
-                <XIcon className="text-destructive" />
+                <XIcon className="text-destructive-foreground" />
               </Button>
             ) : null}
           </AlertAction>
