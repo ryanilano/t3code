@@ -674,7 +674,7 @@ const sidebarMenuButtonVariants = cva(
         sm: "h-7 rounded-lg p-2 text-xs",
       },
       variant: {
-        default: "font-medium text-sidebar-muted-foreground/80",
+        default: "font-medium text-sidebar-muted-foreground",
         outline: "bg-sidebar-control-surface ring-1 ring-sidebar-border",
       },
     },

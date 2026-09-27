@@ -723,7 +723,7 @@ const SidebarThreadRow = memo(function SidebarThreadRow(props: SidebarThreadRowP
             ? "bg-sidebar-row-active font-medium text-sidebar-foreground hover:bg-sidebar-row-active"
             : isSelected
               ? "bg-sidebar-row-selected text-sidebar-foreground hover:bg-sidebar-row-active"
-              : "text-sidebar-muted-foreground/80 hover:bg-sidebar-row-hover hover:text-sidebar-foreground",
+              : "text-sidebar-muted-foreground hover:bg-sidebar-row-hover hover:text-sidebar-foreground",
           isFileDragOver && "ring-1 ring-inset ring-primary/70",
         )}
         onClick={handleRowClick}
@@ -1055,7 +1055,7 @@ const SidebarProjectThreadList = memo(function SidebarProjectThreadList(
         <SidebarMenuSubItem className="w-full" data-thread-selection-safe>
           <div
             data-thread-selection-safe
-            className="flex h-8 w-full translate-x-0 items-center px-2 text-left text-xs text-sidebar-muted-foreground/75"
+            className="flex h-8 w-full translate-x-0 items-center px-2 text-left text-xs text-sidebar-muted-foreground"
           >
             <span>No threads yet</span>
           </div>
@@ -3012,7 +3012,7 @@ const SidebarProjectsContent = memo(function SidebarProjectsContent(
       <LocalSecondaryStatus />
       <SidebarGroup>
         <div className="mb-1 flex items-center justify-between pl-2 pr-1.5">
-          <span className="text-xs font-medium text-sidebar-muted-foreground/80">Projects</span>
+          <span className="text-xs font-medium text-sidebar-muted-foreground">Projects</span>
           <div className="flex items-center gap-1">
             <ProjectSortMenu
               projectSortOrder={projectSortOrder}

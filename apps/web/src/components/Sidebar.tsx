@@ -651,7 +651,7 @@ function SidebarSectionHeader(props: {
   const snoozed = props.marker === "snoozed-header";
   const className = cn(
     "flex h-full w-full items-center gap-2 px-2 text-left text-xs font-medium",
-    snoozed ? "text-info-foreground" : "text-sidebar-muted-foreground/60",
+    snoozed ? "text-info-foreground" : "text-sidebar-muted-foreground",
     props.dragging && "text-sidebar-foreground/80",
     props.isDropTarget && "text-primary",
   );
@@ -4956,7 +4956,7 @@ export default function Sidebar() {
                         <button
                           type="button"
                           onClick={showMoreSettled}
-                          className="flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-md px-2.5 text-left text-sm text-sidebar-muted-foreground/55 hover:bg-sidebar-row-hover hover:text-sidebar-foreground"
+                          className="flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-md px-2.5 text-left text-sm text-sidebar-muted-foreground hover:bg-sidebar-row-hover hover:text-sidebar-foreground"
                         >
                           <PlusIcon aria-hidden className="size-4 shrink-0" />
                           Show {Math.min(hiddenSettledCount, SETTLED_TAIL_PAGE_COUNT)} more
