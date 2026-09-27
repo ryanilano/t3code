@@ -320,7 +320,7 @@ export function ProviderModelsSection({
           />
         }
       >
-        <StarIcon className={cn("size-3", isFavorite && "fill-current text-warning")} />
+        <StarIcon className={cn("size-3", isFavorite && "fill-current text-warning-foreground")} />
       </TooltipTrigger>
       <TooltipPopup side="top">
         {isFavorite ? "Remove from favorites" : "Add to favorites"}

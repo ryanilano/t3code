@@ -672,7 +672,7 @@ export function ProviderInstanceCard({
                           tabIndex={0}
                           role="img"
                           aria-label={versionAdvisory.title}
-                          className="pointer-events-auto relative inline-flex shrink-0 text-warning"
+                          className="pointer-events-auto relative inline-flex shrink-0 text-warning-foreground"
                         >
                           <VersionAdvisoryIcon className="size-3.5" />
                         </span>
@@ -762,7 +762,7 @@ export function ProviderInstanceCard({
                         aria-label={`${versionAdvisory.title} — view details`}
                       >
                         <VersionAdvisoryIcon
-                          className={cn(hasCompatibilityWarning && "text-warning")}
+                          className={cn(hasCompatibilityWarning && "text-warning-foreground")}
                         />
                       </Button>
                     }
@@ -781,7 +781,7 @@ export function ProviderInstanceCard({
                     className={cn(
                       "text-xs leading-snug",
                       versionAdvisory.emphasis === "strong"
-                        ? "text-warning"
+                        ? "text-warning-foreground"
                         : "text-muted-foreground",
                     )}
                   >

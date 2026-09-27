@@ -1720,7 +1720,7 @@ export default function GitActionsControl({
         </MenuItem>
       ) : null}
       {gitStatusForActions?.refName === null && (
-        <p className="px-2 py-1.5 text-xs text-warning">
+        <p className="px-2 py-1.5 text-xs text-warning-foreground">
           Detached HEAD: create and check out a branch to enable push and pull request actions.
         </p>
       )}
@@ -1729,7 +1729,9 @@ export default function GitActionsControl({
         !gitStatusForActions.hasWorkingTreeChanges &&
         gitStatusForActions.behindCount > 0 &&
         gitStatusForActions.aheadCount === 0 && (
-          <p className="px-2 py-1.5 text-xs text-warning">Behind upstream. Pull/rebase first.</p>
+          <p className="px-2 py-1.5 text-xs text-warning-foreground">
+            Behind upstream. Pull/rebase first.
+          </p>
         )}
       {gitStatusError && <p className="px-2 py-1.5 text-xs text-destructive">{gitStatusError}</p>}
     </>
@@ -1768,7 +1770,7 @@ export default function GitActionsControl({
               <MenuItemLabel>{quickAction.label}</MenuItemLabel>
             </MenuItem>
             {quickActionDisabledReason && (
-              <p className="max-w-64 px-2 py-1.5 text-xs text-warning">
+              <p className="max-w-64 px-2 py-1.5 text-xs text-warning-foreground">
                 {quickActionDisabledReason}
               </p>
             )}
@@ -1868,7 +1870,9 @@ export default function GitActionsControl({
                   <span className="font-medium">
                     {gitStatusForActions?.refName ?? "(detached HEAD)"}
                   </span>
-                  {isDefaultRef && <span className="text-right text-warning">Default branch</span>}
+                  {isDefaultRef && (
+                    <span className="text-right text-warning-foreground">Default branch</span>
+                  )}
                 </span>
               </div>
               <div className="space-y-1">

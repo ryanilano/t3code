@@ -217,7 +217,7 @@ export function SettingInheritance({
             className={cn(
               "size-3",
               state === "overridden" && "text-primary",
-              state === "mixed" && "text-warning",
+              state === "mixed" && "text-warning-foreground",
             )}
           />
         </TooltipTrigger>

@@ -4800,7 +4800,7 @@ const PlainWorkEntryRow = memo(function PlainWorkEntryRow(props: {
   const iconWrapperClass = cn(
     "flex size-6 shrink-0 items-center justify-center",
     showWarningIndicator
-      ? "text-warning"
+      ? "text-warning-foreground"
       : showDestructiveRowStyle
         ? "text-destructive"
         : showFailedIndicator
@@ -4810,7 +4810,7 @@ const PlainWorkEntryRow = memo(function PlainWorkEntryRow(props: {
             : iconConfig.className,
   );
   const headingClass = showWarningIndicator
-    ? "font-medium text-warning"
+    ? "font-medium text-warning-foreground"
     : showDestructiveRowStyle
       ? "font-medium text-destructive"
       : workLogEntryIsToolLike(workEntry)

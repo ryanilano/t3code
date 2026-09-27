@@ -255,7 +255,7 @@ function WarningTooltipIcon({
             tabIndex={focusable ? 0 : undefined}
             aria-label={label}
             className={cn(
-              "inline-flex size-5 shrink-0 items-center justify-center rounded-sm text-warning outline-none transition-colors hover:bg-warning/10 focus-visible:ring-3 focus-visible:ring-warning/25",
+              "inline-flex size-5 shrink-0 items-center justify-center rounded-sm text-warning-foreground outline-none transition-colors hover:bg-warning/10 focus-visible:ring-3 focus-visible:ring-warning/25",
               className,
             )}
           />
@@ -1313,7 +1313,7 @@ function KeybindingsList(props: KeybindingsListProps) {
 function BrowserKeybindingNotice() {
   return (
     <div className="flex items-center gap-2 px-3 py-2.5 text-xs leading-normal text-muted-foreground sm:px-4">
-      <TriangleAlertIcon className="size-3.5 shrink-0 text-warning" aria-hidden />
+      <TriangleAlertIcon className="size-3.5 shrink-0 text-warning-foreground" aria-hidden />
       <span>
         Some shortcuts may be claimed by the browser before T3 Code sees them. Use the desktop app
         for better keybinding support.
