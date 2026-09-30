@@ -1063,7 +1063,9 @@ html[data-mobile-composer-route-transition="true"]::view-transition-old(t3-mobil
   --error-surface: color-mix(in srgb, var(--error) 8%, transparent);
   --destructive: var(--error);
   --border: var(--color-zinc-200);
-  --input: var(--color-zinc-300);
+  /* Text-field borders are what show where a field is, so they hold 3:1
+     against the page and sidebar (WCAG 1.4.11). */
+  --input: #919195;
   --ring: var(--primary);
   --destructive-foreground: var(--error-foreground);
   --info: var(--color-blue-500);
@@ -1117,7 +1119,8 @@ html[data-mobile-composer-route-transition="true"]::view-transition-old(t3-mobil
     --tool-error-icon: #fca5a5;
     --error-surface: color-mix(in srgb, var(--error) 16%, transparent);
     --border: --alpha(var(--color-white) / 6%);
-    --input: --alpha(var(--color-white) / 8%);
+    /* 3:1 against the page and cards (WCAG 1.4.11), like the light value. */
+    --input: --alpha(var(--color-white) / 35%);
     --info-foreground: var(--color-blue-400);
     --success-foreground: var(--color-emerald-400);
     --warning-foreground: var(--color-amber-400);
@@ -1148,7 +1151,7 @@ html[data-mobile-composer-route-transition="true"]::view-transition-old(t3-mobil
   --muted: var(--color-zinc-50);
   --muted-foreground: var(--color-zinc-500);
   --border: var(--color-zinc-200);
-  --input: var(--color-zinc-300);
+  --input: #919195;
   --sidebar: var(--color-zinc-50);
   --sidebar-foreground: var(--color-zinc-800);
   --sidebar-muted-foreground: var(--color-zinc-500);
@@ -1169,7 +1172,7 @@ html[data-mobile-composer-route-transition="true"]::view-transition-old(t3-mobil
     --muted: #0a0a0a;
     --muted-foreground: #a3a3a3;
     --border: rgb(255 255 255 / 8%);
-    --input: rgb(255 255 255 / 18%);
+    --input: rgb(255 255 255 / 36%);
     --sidebar: var(--card);
     --sidebar-foreground: var(--foreground);
     --sidebar-muted-foreground: var(--muted-foreground);
