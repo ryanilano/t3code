@@ -1011,7 +1011,8 @@ const SidebarThreadRow = memo(function SidebarThreadRow(props: SidebarThreadRowP
     "group/sidebar-row relative w-full cursor-pointer overflow-hidden rounded-md text-left outline-none select-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
     variantAction === "unsettle" &&
       !props.isActive &&
-      "[&:not(:hover):not(:focus-within)_*:not(.live-activity-focus_*)]:text-secondary-label",
+      // The monogram keeps its own colour: muted grey on its tinted tile falls below 4.5:1.
+      "[&:not(:hover):not(:focus-within)_*:not(.live-activity-focus_*):not([data-slot=project-monogram]_*)]:text-secondary-label",
     props.isActive
       ? "bg-sidebar-row-active text-sidebar-foreground light:ring-1 light:ring-inset light:ring-sidebar-border/70"
       : isSelected || props.sweepAction !== null
@@ -1373,7 +1374,7 @@ const SidebarThreadRow = memo(function SidebarThreadRow(props: SidebarThreadRowP
                   className={cn(
                     "flex shrink-0 items-center transition-opacity",
                     (!props.isActive || variantAction === "unsettle") &&
-                      "opacity-40 grayscale group-focus-within/sidebar-row:opacity-100 group-focus-within/sidebar-row:grayscale-0 group-hover/sidebar-row:opacity-100 group-hover/sidebar-row:grayscale-0",
+                      "grayscale group-focus-within/sidebar-row:grayscale-0 group-hover/sidebar-row:grayscale-0",
                   )}
                 >
                   {props.project ? (
@@ -1913,7 +1914,7 @@ export const SidebarSearchResultRow = memo(function SidebarSearchResultRow(props
                 props.isSettled &&
                   !props.isRouteActive &&
                   !props.isHighlighted &&
-                  "opacity-40 grayscale group-hover/sidebar-row:opacity-100 group-hover/sidebar-row:grayscale-0",
+                  "grayscale group-hover/sidebar-row:grayscale-0",
               )}
             />
           ) : null}
