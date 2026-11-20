@@ -269,7 +269,7 @@ export function SettingsSidebarNav({ pathname }: { pathname: string }) {
           <div className="flex flex-col gap-2">
             <div
               className={cn(
-                "flex h-8 items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium text-sidebar-muted-foreground hover:bg-sidebar-row-hover hover:text-sidebar-foreground has-[input:focus-visible]:bg-sidebar-row-hover has-[input:focus-visible]:text-sidebar-foreground has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-inset has-[input:focus-visible]:ring-ring",
+                "flex h-8 items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium text-sidebar-muted-foreground hover:bg-sidebar-row-hover hover:text-sidebar-foreground has-[input:focus-visible]:bg-sidebar-row-hover has-[input:focus-visible]:text-sidebar-foreground has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-inset has-[input:focus-visible]:ring-ring has-[input:focus-visible]:outline-2 has-[input:focus-visible]:-outline-offset-2 has-[input:focus-visible]:outline-transparent",
                 !compactSearchOpen && "max-md:hidden",
               )}
             >
