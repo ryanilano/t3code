@@ -1146,12 +1146,24 @@ export function hasServerAcknowledgedLocalDispatch(input: {
 // would clear. A plain focused button or a clicked row yields to the composer.
 export function shouldRefocusComposerOnWindowFocus(
   activeElement:
-    | (Pick<Element, "tagName" | "closest" | "getAttribute"> & { isContentEditable?: boolean })
+    | (Pick<Element, "tagName" | "closest" | "getAttribute" | "matches"> & {
+        isContentEditable?: boolean;
+      })
     | null,
   selection: Pick<Selection, "isCollapsed"> | null,
+  focusedOnBlur?: Element | null,
 ): boolean {
   if (selection !== null && !selection.isCollapsed) return false;
   if (activeElement === null || activeElement.tagName === "BODY") return true;
+  // Tab in from the browser chrome puts keyboard focus on a new element; window activation
+  // restores the old one, which a stray key can make match :focus-visible too.
+  if (
+    focusedOnBlur !== undefined &&
+    activeElement !== focusedOnBlur &&
+    activeElement.matches(":focus-visible")
+  ) {
+    return false;
+  }
   if (
     activeElement.tagName === "INPUT" ||
     activeElement.tagName === "TEXTAREA" ||

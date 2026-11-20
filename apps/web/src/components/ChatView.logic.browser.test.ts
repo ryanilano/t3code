@@ -98,3 +98,49 @@ it("refocuses the composer on window return from a clicked area after a bare key
     false,
   );
 });
+
+it("keeps a link Tabbed to from the browser chrome on window return, but not a clicked button", async () => {
+  const root = document.createElement("div");
+  root.innerHTML =
+    '<button>Pull request</button><nav><a href="#threads">Threads</a></nav><textarea aria-label="Composer"></textarea>';
+  document.body.append(root);
+  using _root = { [Symbol.dispose]: () => root.remove() };
+  const link = root.querySelector("a")!;
+  const button = root.querySelector("button")!;
+  const composer = root.querySelector("textarea")!;
+
+  // Tabbing out to the browser chrome clears focus, so the window blurs with the body focused.
+  await userEvent.click(composer);
+  composer.blur();
+  const focusedOnBlur = document.activeElement;
+  expect(focusedOnBlur).toBe(document.body);
+  expect(
+    shouldRefocusComposerOnWindowFocus(
+      document.activeElement,
+      document.getSelection(),
+      focusedOnBlur,
+    ),
+  ).toBe(true);
+
+  // Tab back in from the chrome lands keyboard focus on a sidebar link. The test iframe can't
+  // Tab in from outside, so it Tabs onward from the button.
+  button.focus();
+  await userEvent.tab();
+  expect(document.activeElement).toBe(link);
+  expect(
+    shouldRefocusComposerOnWindowFocus(
+      document.activeElement,
+      document.getSelection(),
+      focusedOnBlur,
+    ),
+    "focus the user Tabbed onto must not be pulled into the composer",
+  ).toBe(false);
+
+  // A clicked button the window returns to, even after a stray key, still yields to the composer.
+  await userEvent.click(button);
+  await userEvent.keyboard("{Shift}");
+  expect(document.activeElement).toBe(button);
+  expect(
+    shouldRefocusComposerOnWindowFocus(document.activeElement, document.getSelection(), button),
+  ).toBe(true);
+});
