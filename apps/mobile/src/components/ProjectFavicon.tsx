@@ -65,14 +65,7 @@ export const ProjectFavicon = memo(function ProjectFavicon(props: {
       : null;
 
   if (symbol !== null) {
-    return (
-      <SymbolView
-        name={symbol.name}
-        size={size}
-        tintColorClassName={projectIconColorClassNames(symbol.color).tint}
-        type="monochrome"
-      />
-    );
+    return <ProjectIconSymbolView symbol={symbol} size={size} />;
   }
 
   if (glyph !== null) {
@@ -91,8 +84,24 @@ export const ProjectFavicon = memo(function ProjectFavicon(props: {
   );
 });
 
+function ProjectIconSymbolView(props: {
+  readonly symbol: NonNullable<ReturnType<typeof resolveProjectIconSymbol>>;
+  readonly size: number;
+}) {
+  const { themeAppearance } = useAppearancePreferences();
+  return (
+    <SymbolView
+      name={props.symbol.name}
+      size={props.size}
+      tintColorClassName={projectIconColorClassNames(props.symbol.color, themeAppearance).tint}
+      type="monochrome"
+    />
+  );
+}
+
 function ProjectIconGlyphView(props: { readonly glyph: ProjectIconGlyph; readonly size: number }) {
   const { glyph, size } = props;
+  const { themeAppearance } = useAppearancePreferences();
   if (glyph.kind === "emoji") {
     return (
       <View style={{ width: size, height: size, alignItems: "center", justifyContent: "center" }}>
@@ -111,7 +120,7 @@ function ProjectIconGlyphView(props: { readonly glyph: ProjectIconGlyph; readonl
     );
   }
 
-  const colors = projectIconColorClassNames(glyph.color);
+  const colors = projectIconColorClassNames(glyph.color, themeAppearance);
   return (
     <View
       className={colors.background}

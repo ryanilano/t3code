@@ -7,13 +7,27 @@ import { Platform, View } from "react-native";
 import Svg, { Rect, Text } from "react-native-svg";
 import { useResolveClassNames } from "uniwind";
 
-import { countGlyphs, projectIconColorClassNames, type ProjectIconGlyph } from "../lib/projectIcon";
+import {
+  countGlyphs,
+  projectIconColorClassNames,
+  type ProjectIconAppearance,
+  type ProjectIconGlyph,
+} from "../lib/projectIcon";
 
 const TILE_SIZE = 48;
 
+type TileGlyph =
+  | { readonly kind: "emoji"; readonly emoji: string }
+  | {
+      readonly kind: "monogram";
+      readonly text: string;
+      readonly color: ProjectIconColor;
+      readonly appearance: ProjectIconAppearance;
+    };
+
 interface PendingTile {
   readonly key: string;
-  readonly glyph: ProjectIconGlyph;
+  readonly glyph: TileGlyph;
   readonly promise: Promise<string>;
   readonly resolve: (uri: string) => void;
   readonly reject: () => void;
@@ -23,15 +37,25 @@ const tiles = new Map<string, PendingTile>();
 let pendingTiles: ReadonlyArray<PendingTile> = [];
 const listeners = new Set<() => void>();
 
-export function projectGlyphKey(glyph: ProjectIconGlyph): string {
+// Monogram ink differs by appearance; emoji tiles do not.
+export function projectGlyphKey(
+  glyph: ProjectIconGlyph,
+  appearance: ProjectIconAppearance,
+): string {
   return JSON.stringify(
-    glyph.kind === "emoji" ? ["emoji", glyph.emoji] : ["monogram", glyph.text, glyph.color],
+    glyph.kind === "emoji"
+      ? ["emoji", glyph.emoji]
+      : ["monogram", glyph.text, glyph.color, appearance],
   );
 }
 
-function decodeGlyphKey(key: string): ProjectIconGlyph {
-  const [kind, text, color] = JSON.parse(key) as [string, string, ProjectIconColor];
-  return kind === "emoji" ? { kind: "emoji", emoji: text } : { kind: "monogram", text, color };
+function decodeGlyphKey(key: string): TileGlyph {
+  const parsed = JSON.parse(key) as
+    | readonly ["emoji", string]
+    | readonly ["monogram", string, ProjectIconColor, ProjectIconAppearance];
+  return parsed[0] === "emoji"
+    ? { kind: "emoji", emoji: parsed[1] }
+    : { kind: "monogram", text: parsed[1], color: parsed[2], appearance: parsed[3] };
 }
 
 function rasterize(key: string): Promise<string> {
@@ -126,15 +150,23 @@ function GlyphCapture(props: { readonly tile: PendingTile }) {
             {props.tile.glyph.emoji}
           </Text>
         ) : (
-          <MonogramTile text={props.tile.glyph.text} color={props.tile.glyph.color} />
+          <MonogramTile
+            text={props.tile.glyph.text}
+            color={props.tile.glyph.color}
+            appearance={props.tile.glyph.appearance}
+          />
         )}
       </Svg>
     </View>
   );
 }
 
-function MonogramTile(props: { readonly text: string; readonly color: ProjectIconColor }) {
-  const classNames = projectIconColorClassNames(props.color);
+function MonogramTile(props: {
+  readonly text: string;
+  readonly color: ProjectIconColor;
+  readonly appearance: ProjectIconAppearance;
+}) {
+  const classNames = projectIconColorClassNames(props.color, props.appearance);
   const background = useResolveClassNames(classNames.background);
   const foreground = useResolveClassNames(`font-mono ${classNames.text}`);
   const fontSize = TILE_SIZE * (countGlyphs(props.text) === 1 ? 0.6 : 0.515625);

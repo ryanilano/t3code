@@ -95,38 +95,117 @@ export function resolveProjectChipIcon(
   return projectAutoMonogram(project.title);
 }
 
+export type ProjectIconAppearance = "light" | "dark";
+
+type ProjectIconInk = { readonly text: string; readonly tint: string };
+
+// The letter needs 4.5:1 on its tile over tinted rows and bubbles in every theme, so it is darkest
+// on light surfaces and lightest on dark ones. Uniwind's `dark:` only matches the theme named
+// "dark", hence the appearance argument. Class names stay literal so Tailwind generates them.
 const PROJECT_ICON_COLOR_CLASSES: Record<
   ProjectIconColor,
-  { readonly text: string; readonly tint: string; readonly background: string }
+  {
+    readonly light: ProjectIconInk;
+    readonly dark: ProjectIconInk;
+    readonly background: string;
+  }
 > = {
-  gray: { text: "text-gray-500", tint: "accent-gray-500", background: "bg-gray-500/15" },
-  red: { text: "text-red-500", tint: "accent-red-500", background: "bg-red-500/15" },
-  orange: { text: "text-orange-500", tint: "accent-orange-500", background: "bg-orange-500/15" },
-  amber: { text: "text-amber-500", tint: "accent-amber-500", background: "bg-amber-500/15" },
-  yellow: { text: "text-yellow-500", tint: "accent-yellow-500", background: "bg-yellow-500/15" },
-  lime: { text: "text-lime-500", tint: "accent-lime-500", background: "bg-lime-500/15" },
-  green: { text: "text-green-500", tint: "accent-green-500", background: "bg-green-500/15" },
+  gray: {
+    light: { text: "text-gray-900", tint: "accent-gray-900" },
+    dark: { text: "text-gray-100", tint: "accent-gray-100" },
+    background: "bg-gray-500/15",
+  },
+  red: {
+    light: { text: "text-red-900", tint: "accent-red-900" },
+    dark: { text: "text-red-100", tint: "accent-red-100" },
+    background: "bg-red-500/15",
+  },
+  orange: {
+    light: { text: "text-orange-900", tint: "accent-orange-900" },
+    dark: { text: "text-orange-100", tint: "accent-orange-100" },
+    background: "bg-orange-500/15",
+  },
+  amber: {
+    light: { text: "text-amber-900", tint: "accent-amber-900" },
+    dark: { text: "text-amber-100", tint: "accent-amber-100" },
+    background: "bg-amber-500/15",
+  },
+  yellow: {
+    light: { text: "text-yellow-900", tint: "accent-yellow-900" },
+    dark: { text: "text-yellow-100", tint: "accent-yellow-100" },
+    background: "bg-yellow-500/15",
+  },
+  lime: {
+    light: { text: "text-lime-900", tint: "accent-lime-900" },
+    dark: { text: "text-lime-100", tint: "accent-lime-100" },
+    background: "bg-lime-500/15",
+  },
+  green: {
+    light: { text: "text-green-900", tint: "accent-green-900" },
+    dark: { text: "text-green-100", tint: "accent-green-100" },
+    background: "bg-green-500/15",
+  },
   emerald: {
-    text: "text-emerald-500",
-    tint: "accent-emerald-500",
+    light: { text: "text-emerald-900", tint: "accent-emerald-900" },
+    dark: { text: "text-emerald-100", tint: "accent-emerald-100" },
     background: "bg-emerald-500/15",
   },
-  teal: { text: "text-teal-500", tint: "accent-teal-500", background: "bg-teal-500/15" },
-  cyan: { text: "text-cyan-500", tint: "accent-cyan-500", background: "bg-cyan-500/15" },
-  sky: { text: "text-sky-500", tint: "accent-sky-500", background: "bg-sky-500/15" },
-  blue: { text: "text-blue-500", tint: "accent-blue-500", background: "bg-blue-500/15" },
-  indigo: { text: "text-indigo-500", tint: "accent-indigo-500", background: "bg-indigo-500/15" },
-  violet: { text: "text-violet-500", tint: "accent-violet-500", background: "bg-violet-500/15" },
-  purple: { text: "text-purple-500", tint: "accent-purple-500", background: "bg-purple-500/15" },
+  teal: {
+    light: { text: "text-teal-900", tint: "accent-teal-900" },
+    dark: { text: "text-teal-100", tint: "accent-teal-100" },
+    background: "bg-teal-500/15",
+  },
+  cyan: {
+    light: { text: "text-cyan-900", tint: "accent-cyan-900" },
+    dark: { text: "text-cyan-100", tint: "accent-cyan-100" },
+    background: "bg-cyan-500/15",
+  },
+  sky: {
+    light: { text: "text-sky-900", tint: "accent-sky-900" },
+    dark: { text: "text-sky-100", tint: "accent-sky-100" },
+    background: "bg-sky-500/15",
+  },
+  blue: {
+    light: { text: "text-blue-900", tint: "accent-blue-900" },
+    dark: { text: "text-blue-100", tint: "accent-blue-100" },
+    background: "bg-blue-500/15",
+  },
+  indigo: {
+    light: { text: "text-indigo-900", tint: "accent-indigo-900" },
+    dark: { text: "text-indigo-100", tint: "accent-indigo-100" },
+    background: "bg-indigo-500/15",
+  },
+  violet: {
+    light: { text: "text-violet-900", tint: "accent-violet-900" },
+    dark: { text: "text-violet-100", tint: "accent-violet-100" },
+    background: "bg-violet-500/15",
+  },
+  purple: {
+    light: { text: "text-purple-900", tint: "accent-purple-900" },
+    dark: { text: "text-purple-100", tint: "accent-purple-100" },
+    background: "bg-purple-500/15",
+  },
   fuchsia: {
-    text: "text-fuchsia-500",
-    tint: "accent-fuchsia-500",
+    light: { text: "text-fuchsia-900", tint: "accent-fuchsia-900" },
+    dark: { text: "text-fuchsia-100", tint: "accent-fuchsia-100" },
     background: "bg-fuchsia-500/15",
   },
-  pink: { text: "text-pink-500", tint: "accent-pink-500", background: "bg-pink-500/15" },
-  rose: { text: "text-rose-500", tint: "accent-rose-500", background: "bg-rose-500/15" },
+  pink: {
+    light: { text: "text-pink-900", tint: "accent-pink-900" },
+    dark: { text: "text-pink-100", tint: "accent-pink-100" },
+    background: "bg-pink-500/15",
+  },
+  rose: {
+    light: { text: "text-rose-900", tint: "accent-rose-900" },
+    dark: { text: "text-rose-100", tint: "accent-rose-100" },
+    background: "bg-rose-500/15",
+  },
 };
 
-export function projectIconColorClassNames(color: ProjectIconColor) {
-  return PROJECT_ICON_COLOR_CLASSES[color];
+export function projectIconColorClassNames(
+  color: ProjectIconColor,
+  appearance: ProjectIconAppearance,
+) {
+  const classes = PROJECT_ICON_COLOR_CLASSES[color];
+  return { ...classes[appearance], background: classes.background };
 }

@@ -30,7 +30,7 @@ import { AsyncResult, Atom } from "effect/reactivity";
 import { msg, useMessages } from "gt-react-native";
 
 import { threadChipTargets } from "../lib/enrichedLinkPresentation";
-import { resolveProjectChipIcon } from "../lib/projectIcon";
+import { type ProjectIconAppearance, resolveProjectChipIcon } from "../lib/projectIcon";
 import { projectGlyphImageAtom, projectGlyphKey } from "../native/ProjectChipIconImages";
 import { projectFaviconUrlAtom } from "./assets";
 import { orchestrationEnvironment } from "./orchestration";
@@ -104,8 +104,14 @@ const decodeThreadChipTargets = Schema.decodeUnknownSync(
   ),
 );
 
+const ProjectIconAppearanceSchema = Schema.Literals(["light", "dark"]);
+const decodeChipIconKey = Schema.decodeUnknownSync(
+  Schema.Tuple([ProjectIconAppearanceSchema, EnvironmentId, ThreadId]),
+);
+
 const threadProjectChipIconAtom = Atom.family((key: string) => {
-  const ref = scopeThreadRef(...decodeThreadKey(JSON.parse(key)));
+  const [appearance, environmentId, threadId] = decodeChipIconKey(JSON.parse(key));
+  const ref = scopeThreadRef(environmentId, threadId);
   return Atom.make((get): string | null => {
     const shell = get(environmentThreadShells.threadShellAtom(ref));
     const metadata =
@@ -143,7 +149,10 @@ const threadProjectChipIconAtom = Atom.family((key: string) => {
     );
     if (!icon) return null;
     if (icon.kind === "favicon") return icon.uri;
-    return AsyncResult.getOrElse(get(projectGlyphImageAtom(projectGlyphKey(icon))), () => null);
+    return AsyncResult.getOrElse(
+      get(projectGlyphImageAtom(projectGlyphKey(icon, appearance))),
+      () => null,
+    );
   }).pipe(Atom.withLabel(`mobile-thread-project-chip-icon:${key}`));
 });
 
@@ -152,8 +161,13 @@ const EMPTY_THREAD_CHIP_ICONS_ATOM = Atom.make(EMPTY_THREAD_CHIP_ICONS).pipe(
   Atom.withLabel("mobile-thread-chip-icons:empty"),
 );
 
+const decodeThreadChipIconsKey = Schema.decodeUnknownSync(
+  Schema.Struct({ appearance: ProjectIconAppearanceSchema, targets: Schema.Unknown }),
+);
+
 const threadChipIconsAtom = Atom.family((key: string) => {
-  const targets = decodeThreadChipTargets(JSON.parse(key));
+  const { appearance, targets: rawTargets } = decodeThreadChipIconsKey(JSON.parse(key));
+  const targets = decodeThreadChipTargets(rawTargets);
   return Atom.make((get) => {
     const icons = new Map<string, string>();
     for (const target of targets) {
@@ -161,7 +175,9 @@ const threadChipIconsAtom = Atom.family((key: string) => {
       const ref =
         (link ? resolveThreadLink(get, link, target.environmentId) : null) ??
         scopeThreadRef(target.environmentId, target.threadId);
-      const icon = get(threadProjectChipIconAtom(threadKey(ref)));
+      const icon = get(
+        threadProjectChipIconAtom(JSON.stringify([appearance, ref.environmentId, ref.threadId])),
+      );
       if (icon) icons.set(target.href, icon);
     }
     return icons;
@@ -283,6 +299,7 @@ export function resolveThreadLink(
 
 export function useThreadChipIcons(
   environmentId: EnvironmentId,
+  appearance: ProjectIconAppearance,
   markdown: string,
   records?: ReadonlyArray<ComposerContextRecord>,
 ): ReadonlyMap<string, string> {
@@ -290,7 +307,7 @@ export function useThreadChipIcons(
   return useAtomValue(
     targets.length === 0
       ? EMPTY_THREAD_CHIP_ICONS_ATOM
-      : threadChipIconsAtom(JSON.stringify(targets)),
+      : threadChipIconsAtom(JSON.stringify({ appearance, targets })),
   );
 }
 
