@@ -1013,7 +1013,8 @@ const SidebarThreadRow = memo(function SidebarThreadRow(props: SidebarThreadRowP
   // their parts instead and skip the badge (`data-recede-keep`): at 70% it falls below 4.5:1.
   const fadePartsNotRow = recedeWorking && (variant === "card" || variant === "slim");
   const recedePartsClassName = fadePartsNotRow
-    ? "[&>:not([data-recede-keep])]:opacity-70 [&>:not([data-recede-keep])]:transition-opacity motion-reduce:[&>:not([data-recede-keep])]:transition-none group-hover/sidebar-row:[&>:not([data-recede-keep])]:opacity-100 group-focus-within/sidebar-row:[&>:not([data-recede-keep])]:opacity-100"
+    ? // `:where()` adds no specificity, so a part's own opacity and transition utilities still win.
+      "[:where(&>:not([data-recede-keep]))]:opacity-70 [:where(&>:not([data-recede-keep]))]:transition-opacity motion-reduce:[:where(&>:not([data-recede-keep]))]:transition-none group-hover/sidebar-row:[:where(&>:not([data-recede-keep]))]:opacity-100 group-focus-within/sidebar-row:[:where(&>:not([data-recede-keep]))]:opacity-100"
     : undefined;
   const rowSurfaceClassName = cn(
     "group/sidebar-row relative w-full cursor-pointer overflow-hidden rounded-md text-left outline-none select-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
@@ -1588,6 +1589,7 @@ const SidebarThreadRow = memo(function SidebarThreadRow(props: SidebarThreadRowP
               recedePartsClassName,
             )}
           >
+            {/* `data-recede-keep` here means its children fade, not the header: both would be 49%. */}
             <div
               data-recede-keep
               className={cn("flex h-5 min-w-0 items-center gap-1.5", recedePartsClassName)}
