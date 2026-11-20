@@ -1374,7 +1374,8 @@ const SidebarThreadRow = memo(function SidebarThreadRow(props: SidebarThreadRowP
                   className={cn(
                     "flex shrink-0 items-center transition-opacity",
                     (!props.isActive || variantAction === "unsettle") &&
-                      "grayscale group-focus-within/sidebar-row:grayscale-0 group-hover/sidebar-row:grayscale-0",
+                      // Monograms skip the fade: at 40% their letters drop below 4.5:1.
+                      "opacity-40 grayscale group-focus-within/sidebar-row:opacity-100 group-focus-within/sidebar-row:grayscale-0 group-hover/sidebar-row:opacity-100 group-hover/sidebar-row:grayscale-0 has-[[data-slot=project-monogram]]:opacity-100",
                   )}
                 >
                   {props.project ? (
@@ -1575,7 +1576,15 @@ const SidebarThreadRow = memo(function SidebarThreadRow(props: SidebarThreadRowP
             <div className="flex h-5 min-w-0 items-center gap-1.5">
               {draftIndicator}
               {props.project ? (
-                <ProjectFavicon project={props.project} className="size-4 shrink-0" />
+                <ProjectFavicon
+                  project={props.project}
+                  className={cn(
+                    "size-4 shrink-0",
+                    variantAction === "unsettle" &&
+                      !props.isActive &&
+                      "grayscale group-focus-within/sidebar-row:grayscale-0 group-hover/sidebar-row:grayscale-0",
+                  )}
+                />
               ) : null}
               {/* Left of the status slot, the pin would slide when hover swaps the
                 label for the wider row controls. */}
@@ -1914,7 +1923,7 @@ export const SidebarSearchResultRow = memo(function SidebarSearchResultRow(props
                 props.isSettled &&
                   !props.isRouteActive &&
                   !props.isHighlighted &&
-                  "grayscale group-hover/sidebar-row:grayscale-0",
+                  "opacity-40 grayscale group-hover/sidebar-row:opacity-100 group-hover/sidebar-row:grayscale-0 data-[slot=project-monogram]:opacity-100",
               )}
             />
           ) : null}
