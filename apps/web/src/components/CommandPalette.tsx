@@ -174,6 +174,7 @@ import {
   getCommandPaletteReturnFocus,
   useCommandPaletteMount,
   useCommandPaletteStore,
+  wasCommandPaletteOpenerFocusVisible,
 } from "../commandPaletteStore";
 import {
   PULL_REQUESTS_PANEL_REF,
@@ -391,10 +392,17 @@ function CommandPaletteDialog(props: {
       data-command-palette="true"
       data-palette-mode={props.mode}
       data-testid="command-palette"
-      finalFocus={() => {
+      finalFocus={(closeType) => {
         if (restoreWorkspaceFocusFromPalette()) return false;
         const returnFocus = getCommandPaletteReturnFocus();
         if (returnFocus === false) return false;
+        if (
+          closeType === "keyboard" &&
+          returnFocus !== true &&
+          !returnFocus.isContentEditable &&
+          wasCommandPaletteOpenerFocusVisible()
+        )
+          return returnFocus;
         const composer = composerHandleRef?.current;
         // Behind the Settings modal the composer is inert and cannot take focus.
         if (!composer || document.querySelector("[data-app-modal]")) return returnFocus;

@@ -1,15 +1,18 @@
 import { threadKey } from "@t3tools/client-runtime/state/entities";
 import { EnvironmentId, ProjectId, ThreadId } from "@t3tools/contracts";
+import { useImperativeHandle, useRef } from "react";
 import { describe, expect, it, vi } from "vite-plus/test";
 import { page, userEvent } from "vite-plus/test/browser";
 
 import { act, render } from "../../test/render";
 import { openCommandPalette } from "../commandPaletteBus";
 import { useCommandPaletteStore } from "../commandPaletteStore";
+import { useComposerHandleContext } from "../composerHandleContext";
 import { LAST_USED_PROJECT_STORAGE_KEY } from "../hooks/useHandleNewThread";
 import { removeLocalStorageItem } from "../hooks/useLocalStorage";
 import { makeThreadFixture } from "../test-fixtures";
 import type { Project, Thread } from "../types";
+import type { ChatComposerHandle } from "./chat/ChatComposer";
 import { CommandPalette } from "./CommandPalette";
 
 const entities = vi.hoisted(() => ({
@@ -307,5 +310,40 @@ describe("CommandPalette open intents", () => {
         projectId: ProjectId.make("lima"),
       }),
     );
+  });
+});
+
+// A stub composer that registers its handle the way ChatComposer does.
+function StubComposer() {
+  const composerRef = useComposerHandleContext();
+  const editorRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(
+    composerRef ?? undefined,
+    () => ({ focusAtEnd: () => editorRef.current?.focus() }) as unknown as ChatComposerHandle,
+  );
+  return <div aria-label="Composer" contentEditable role="textbox" tabIndex={0} ref={editorRef} />;
+}
+
+describe("CommandPalette focus return", () => {
+  it("returns focus to the button a keyboard user opened it from, not the composer", async () => {
+    setup();
+    await using screen = await render(
+      <CommandPalette>
+        <button type="button" onClick={() => openCommandPalette({})}>
+          Open command palette
+        </button>
+        <StubComposer />
+      </CommandPalette>,
+    );
+    const opener = screen.getByRole("button", { name: "Open command palette" });
+    await userEvent.tab();
+    await expect.element(opener).toHaveFocus();
+    await userEvent.keyboard("{Enter}");
+    await expect.element(page.getByTestId("command-palette")).toBeVisible();
+
+    await userEvent.keyboard("{Escape}");
+
+    await expect.element(page.getByTestId("command-palette")).not.toBeInTheDocument();
+    await expect.element(opener).toHaveFocus();
   });
 });
