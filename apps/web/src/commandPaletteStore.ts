@@ -17,15 +17,22 @@ const INITIAL_STATE: CommandPaletteUiState = {
 
 export const useCommandPaletteStore = create<CommandPaletteUiState>(() => INITIAL_STATE);
 
-let returnFocus: { element: HTMLElement | null; href: string; focusRequest: number } | null = null;
+let returnFocus: {
+  element: HTMLElement | null;
+  focusVisible: boolean;
+  href: string;
+  focusRequest: number;
+} | null = null;
 
 export function dispatchCommandPalette(action: CommandPaletteUiAction): void {
   const state = useCommandPaletteStore.getState();
   const next = reduceCommandPaletteUiState(state, action);
   if (!state.open && next.open) {
     // The workspace turns inert before the popup mounts, which blurs the opener.
+    const element = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     returnFocus = {
-      element: document.activeElement instanceof HTMLElement ? document.activeElement : null,
+      element,
+      focusVisible: element?.matches(":focus-visible") ?? false,
       href: window.location.href,
       focusRequest: getWorkspaceFocusRequestVersion(),
     };
@@ -48,15 +55,20 @@ export function getCommandPaletteReturnFocus(): HTMLElement | boolean {
   return element && canReturnFocusTo(element) ? element : true;
 }
 
-// `body` means nothing had focus (a global shortcut), so there is no opener to go back to.
-// A hidden opener, such as a button in a sidebar collapsed meanwhile, cannot take focus.
 function canReturnFocusTo(element: HTMLElement): boolean {
   return (
     element !== document.body &&
     element.isConnected &&
     !element.matches(":disabled") &&
-    element.checkVisibility()
+    !element.closest("[inert]") &&
+    // Safari before 17.4 has no checkVisibility.
+    (typeof element.checkVisibility !== "function" || element.checkVisibility())
   );
+}
+
+/** Whether the opener showed a focus ring, so a keyboard user (not a click) put focus there. */
+export function wasCommandPaletteOpenerFocusVisible(): boolean {
+  return returnFocus?.focusVisible ?? false;
 }
 
 /** The element the palette opened from, while focus is still inside the palette. */

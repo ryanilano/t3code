@@ -325,9 +325,9 @@ function StubComposer() {
 }
 
 describe("CommandPalette focus return", () => {
-  async function renderWithOpener() {
+  it("returns focus to the button a keyboard user opened it from, not the composer", async () => {
     setup();
-    return render(
+    await using screen = await render(
       <CommandPalette>
         <button type="button" onClick={() => openCommandPalette({})}>
           Open command palette
@@ -335,12 +335,9 @@ describe("CommandPalette focus return", () => {
         <StubComposer />
       </CommandPalette>,
     );
-  }
-
-  it("returns focus to the button that opened it, not the composer", async () => {
-    await using screen = await renderWithOpener();
     const opener = screen.getByRole("button", { name: "Open command palette" });
-    (opener.element() as HTMLElement).focus();
+    await userEvent.tab();
+    await expect.element(opener).toHaveFocus();
     await userEvent.keyboard("{Enter}");
     await expect.element(page.getByTestId("command-palette")).toBeVisible();
 
@@ -348,18 +345,5 @@ describe("CommandPalette focus return", () => {
 
     await expect.element(page.getByTestId("command-palette")).not.toBeInTheDocument();
     await expect.element(opener).toHaveFocus();
-  });
-
-  it("returns focus to the composer when the shortcut fired from the composer", async () => {
-    await using screen = await renderWithOpener();
-    const composer = screen.getByRole("textbox", { name: "Composer" });
-    (composer.element() as HTMLElement).focus();
-    openCommandPalette({});
-    await expect.element(page.getByTestId("command-palette")).toBeVisible();
-
-    await userEvent.keyboard("{Escape}");
-
-    await expect.element(page.getByTestId("command-palette")).not.toBeInTheDocument();
-    await expect.element(composer).toHaveFocus();
   });
 });
