@@ -1007,6 +1007,14 @@ const SidebarThreadRow = memo(function SidebarThreadRow(props: SidebarThreadRowP
     }
   };
 
+  const recedeWorking =
+    shouldRecede && (status === "preparing" || status === "working") && !props.sortable?.isDragging;
+  // A child cannot opt out of its parent's opacity, so rows that show the project badge fade
+  // their parts instead and skip the badge (`data-recede-keep`): at 70% it falls below 4.5:1.
+  const fadePartsNotRow = recedeWorking && (variant === "card" || variant === "slim");
+  const recedePartsClassName = fadePartsNotRow
+    ? "[&>:not([data-recede-keep])]:opacity-70 [&>:not([data-recede-keep])]:transition-opacity motion-reduce:[&>:not([data-recede-keep])]:transition-none group-hover/sidebar-row:[&>:not([data-recede-keep])]:opacity-100 group-focus-within/sidebar-row:[&>:not([data-recede-keep])]:opacity-100"
+    : undefined;
   const rowSurfaceClassName = cn(
     "group/sidebar-row relative w-full cursor-pointer overflow-hidden rounded-md text-left outline-none select-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
     variantAction === "unsettle" &&
@@ -1022,8 +1030,8 @@ const SidebarThreadRow = memo(function SidebarThreadRow(props: SidebarThreadRowP
           : shouldRecede
             ? "text-sidebar-muted-foreground/75 hover:bg-sidebar-row-hover hover:text-sidebar-foreground"
             : "bg-transparent text-sidebar-foreground hover:bg-sidebar-row-hover",
-    shouldRecede &&
-      (status === "preparing" || status === "working") &&
+    recedeWorking &&
+      !fadePartsNotRow &&
       "opacity-70 transition-opacity hover:opacity-100 focus-within:opacity-100 motion-reduce:transition-none",
     isFileDragOver && "ring-1 ring-inset ring-primary/70",
     isFileDragOver && !props.isActive && !isSelected && "bg-sidebar-row-hover",
@@ -1368,9 +1376,15 @@ const SidebarThreadRow = memo(function SidebarThreadRow(props: SidebarThreadRowP
             }
           >
             {/* `contents` keeps one-line rows a single flex row. */}
-            <div className={multiline ? "flex h-6 min-w-0 items-center gap-2.5" : "contents"}>
+            <div
+              className={cn(
+                multiline ? "flex h-6 min-w-0 items-center gap-2.5" : "contents",
+                recedePartsClassName,
+              )}
+            >
               {inFolder ? null : (
                 <span
+                  data-recede-keep
                   className={cn(
                     "flex shrink-0 items-center transition-opacity",
                     (!props.isActive || variantAction === "unsettle") &&
@@ -1571,20 +1585,26 @@ const SidebarThreadRow = memo(function SidebarThreadRow(props: SidebarThreadRowP
             className={cn(
               "relative z-10 h-[4.875rem] px-(--sidebar-row-content-inset) py-(--sidebar-content-inset)",
               metaLineEmpty && "h-auto",
+              recedePartsClassName,
             )}
           >
-            <div className="flex h-5 min-w-0 items-center gap-1.5">
+            <div
+              data-recede-keep
+              className={cn("flex h-5 min-w-0 items-center gap-1.5", recedePartsClassName)}
+            >
               {draftIndicator}
               {props.project ? (
-                <ProjectFavicon
-                  project={props.project}
-                  className={cn(
-                    "size-4 shrink-0",
-                    variantAction === "unsettle" &&
-                      !props.isActive &&
-                      "grayscale group-focus-within/sidebar-row:grayscale-0 group-hover/sidebar-row:grayscale-0",
-                  )}
-                />
+                <span data-recede-keep className="contents">
+                  <ProjectFavicon
+                    project={props.project}
+                    className={cn(
+                      "size-4 shrink-0",
+                      variantAction === "unsettle" &&
+                        !props.isActive &&
+                        "grayscale group-focus-within/sidebar-row:grayscale-0 group-hover/sidebar-row:grayscale-0",
+                    )}
+                  />
+                </span>
               ) : null}
               {/* Left of the status slot, the pin would slide when hover swaps the
                 label for the wider row controls. */}
