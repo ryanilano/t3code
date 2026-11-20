@@ -45,7 +45,18 @@ export function getCommandPaletteReturnFocus(): HTMLElement | boolean {
   )
     return false;
   const { element } = returnFocus;
-  return element?.isConnected && !element.matches(":disabled") ? element : true;
+  return element && canReturnFocusTo(element) ? element : true;
+}
+
+// `body` means nothing had focus (a global shortcut), so there is no opener to go back to.
+// A hidden opener, such as a button in a sidebar collapsed meanwhile, cannot take focus.
+function canReturnFocusTo(element: HTMLElement): boolean {
+  return (
+    element !== document.body &&
+    element.isConnected &&
+    !element.matches(":disabled") &&
+    element.checkVisibility()
+  );
 }
 
 /** The element the palette opened from, while focus is still inside the palette. */

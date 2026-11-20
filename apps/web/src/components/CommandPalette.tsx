@@ -395,6 +395,10 @@ function CommandPaletteDialog(props: {
         if (restoreWorkspaceFocusFromPalette()) return false;
         const returnFocus = getCommandPaletteReturnFocus();
         if (returnFocus === false) return false;
+        // A control such as a sidebar or header button opened the palette: give focus back to
+        // it so keyboard users keep their place. Only an opener that was editable text (the
+        // composer) or no opener at all falls through to the composer.
+        if (returnFocus !== true && !returnFocus.isContentEditable) return returnFocus;
         const composer = composerHandleRef?.current;
         // Behind the Settings modal the composer is inert and cannot take focus.
         if (!composer || document.querySelector("[data-app-modal]")) return returnFocus;
