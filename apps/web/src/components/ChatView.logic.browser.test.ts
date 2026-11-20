@@ -99,48 +99,41 @@ it("refocuses the composer on window return from a clicked area after a bare key
   );
 });
 
-it("keeps a link Tabbed to from the browser chrome on window return, but not a clicked button", async () => {
+it("keeps keyboard focus across a window switch, but not a clicked or moved focus", async () => {
   const root = document.createElement("div");
-  root.innerHTML =
-    '<button>Pull request</button><nav><a href="#threads">Threads</a></nav><textarea aria-label="Composer"></textarea>';
+  root.innerHTML = '<button>Pull request</button><nav><a href="#threads">Threads</a></nav>';
   document.body.append(root);
   using _root = { [Symbol.dispose]: () => root.remove() };
-  const link = root.querySelector("a")!;
   const button = root.querySelector("button")!;
-  const composer = root.querySelector("textarea")!;
-
-  // Tabbing out to the browser chrome clears focus, so the window blurs with the body focused.
-  await userEvent.click(composer);
-  composer.blur();
-  const focusedOnBlur = document.activeElement;
-  expect(focusedOnBlur).toBe(document.body);
-  expect(
+  const link = root.querySelector("a")!;
+  const blur = () => ({
+    element: document.activeElement,
+    focusVisible: document.activeElement?.matches(":focus-visible") ?? false,
+  });
+  const refocus = (focusOnBlur: ReturnType<typeof blur>) =>
     shouldRefocusComposerOnWindowFocus(
       document.activeElement,
       document.getSelection(),
-      focusedOnBlur,
-    ),
-  ).toBe(true);
+      focusOnBlur,
+    );
 
-  // Tab back in from the chrome lands keyboard focus on a sidebar link. The test iframe can't
-  // Tab in from outside, so it Tabs onward from the button.
-  button.focus();
+  // A clicked button the window returns to still yields to the composer.
+  await userEvent.click(button);
+  expect(refocus(blur())).toBe(true);
+
+  // Tab out to the browser chrome blurs the window with nothing focused; Tab back in lands on a
+  // link. The test iframe can't Tab in from outside, so it Tabs onward from the button.
+  const tabbedOut = { element: document.body, focusVisible: false };
   await userEvent.tab();
   expect(document.activeElement).toBe(link);
-  expect(
-    shouldRefocusComposerOnWindowFocus(
-      document.activeElement,
-      document.getSelection(),
-      focusedOnBlur,
-    ),
-    "focus the user Tabbed onto must not be pulled into the composer",
-  ).toBe(false);
+  expect(refocus(tabbedOut), "focus Tabbed onto must stay put").toBe(false);
 
-  // A clicked button the window returns to, even after a stray key, still yields to the composer.
-  await userEvent.click(button);
-  await userEvent.keyboard("{Shift}");
-  expect(document.activeElement).toBe(button);
-  expect(
-    shouldRefocusComposerOnWindowFocus(document.activeElement, document.getSelection(), button),
-  ).toBe(true);
+  // The link had keyboard focus when the window blurred (Ctrl+L, Cmd+Tab) and has it again.
+  expect(refocus(blur()), "returning keyboard focus must stay put").toBe(false);
+
+  // Focus moved by script while away, such as a dialog closing onto its trigger, still yields.
+  const onLink = blur();
+  button.focus();
+  expect(button.matches(":focus-visible")).toBe(true);
+  expect(refocus(onLink)).toBe(true);
 });

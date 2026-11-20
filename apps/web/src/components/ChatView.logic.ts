@@ -1142,8 +1142,8 @@ export function hasServerAcknowledgedLocalDispatch(input: {
 
 // Window return puts the caret in the composer unless focus or a selection is deliberate: another
 // text field, a terminal, an open dialog, menu, or popup, a region, timeline, or sidebar row reached
-// from the keyboard, a region with its own keys (aria-keyshortcuts), or selected text the composer
-// would clear. A plain focused button or a clicked row yields to the composer.
+// from the keyboard, keyboard focus kept across the window switch, a region with its own keys
+// (aria-keyshortcuts), or selected text the composer would clear. A clicked button or row yields.
 export function shouldRefocusComposerOnWindowFocus(
   activeElement:
     | (Pick<Element, "tagName" | "closest" | "getAttribute" | "matches"> & {
@@ -1151,18 +1151,21 @@ export function shouldRefocusComposerOnWindowFocus(
       })
     | null,
   selection: Pick<Selection, "isCollapsed"> | null,
-  focusedOnBlur?: Element | null,
+  focusOnBlur?: { readonly element: Element | null; readonly focusVisible: boolean },
 ): boolean {
   if (selection !== null && !selection.isCollapsed) return false;
   if (activeElement === null || activeElement.tagName === "BODY") return true;
-  // Tab in from the browser chrome puts keyboard focus on a new element; window activation
-  // restores the old one, which a stray key can make match :focus-visible too.
-  if (
-    focusedOnBlur !== undefined &&
-    activeElement !== focusedOnBlur &&
-    activeElement.matches(":focus-visible")
-  ) {
-    return false;
+  // Keyboard focus survives the round trip: Tab back in from the browser chrome (which blurs the
+  // window with nothing focused), or a return to the element that had keyboard focus at blur.
+  if (focusOnBlur !== undefined && activeElement.matches(":focus-visible")) {
+    const blurredWithNothingFocused =
+      focusOnBlur.element === null || focusOnBlur.element.tagName === "BODY";
+    if (
+      blurredWithNothingFocused ||
+      (focusOnBlur.focusVisible && activeElement === focusOnBlur.element)
+    ) {
+      return false;
+    }
   }
   if (
     activeElement.tagName === "INPUT" ||

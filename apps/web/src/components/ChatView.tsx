@@ -2197,9 +2197,10 @@ export default function ChatView(props: ChatViewProps) {
       return;
     }
     let frame: number | null = null;
-    let focusedOnBlur = document.activeElement;
+    let focusOnBlur: { element: Element | null; focusVisible: boolean } | undefined;
     const onWindowBlur = () => {
-      focusedOnBlur = document.activeElement;
+      const element = document.activeElement;
+      focusOnBlur = { element, focusVisible: element?.matches(":focus-visible") ?? false };
     };
     const onWindowFocus = () => {
       if (frame !== null) window.cancelAnimationFrame(frame);
@@ -2213,7 +2214,7 @@ export default function ChatView(props: ChatViewProps) {
             shouldRefocusComposerOnWindowFocus(
               document.activeElement,
               document.getSelection(),
-              focusedOnBlur,
+              focusOnBlur,
             )
           ) {
             focusComposerStable();
