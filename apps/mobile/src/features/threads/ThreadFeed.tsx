@@ -178,7 +178,7 @@ import { MARKDOWN_IMAGE_MAX_WIDTH, resolveMarkdownImageDisplaySize } from "./mar
 import { FilePreviewModal, type FilePreviewSource } from "../../components/ui/FilePreviewModal";
 import { inlineFilePreviewKind, isPdfFile } from "../../lib/filePreview";
 import { ThreadInlineFilePreview } from "./ThreadInlineFilePreview";
-import { flattenThemeColor, themeColorWithContrast } from "../../lib/mobileTheme";
+import { flattenThemeColor, isDarkThemeColor, themeColorWithContrast } from "../../lib/mobileTheme";
 import { PresentationSource } from "../../components/ui/NativePresentation";
 import { NativeScrollViewMarker } from "../../native/NativeScrollViewMarker";
 import Animated, { FadeIn, FadeInDown, type SharedValue } from "react-native-reanimated";
@@ -1345,7 +1345,8 @@ const AssistantMarkdownContent = memo(function AssistantMarkdownContent(props: {
     });
   };
   const models = useModelMentions(props.environmentId, props.markdown);
-  const threadIcons = useThreadChipIcons(props.environmentId, liveMarkdown);
+  const { themeAppearance } = useAppearancePreferences();
+  const threadIcons = useThreadChipIcons(props.environmentId, themeAppearance, liveMarkdown);
   const withGallery = useFilePreviewGallery();
   const onImagePress = props.linkHandlers.onImagePress;
   const linkHandlers: MarkdownLinkHandlers = {
@@ -2798,7 +2799,16 @@ function UserMessageContent(props: UserMessageContentProps) {
   const openLinkedThread = useOpenLinkedThread();
   const { selectedThread } = useThreadSelection();
   const liveText = useLiveThreadLinkLabels(props.text, props.environmentId);
-  const threadIcons = useThreadChipIcons(props.environmentId, liveText, props.context?.records);
+  // These chips sit on the user bubble, which can be dark in a light theme (Material You).
+  const bubbleAppearance = isDarkThemeColor(useUniwindTheme()["--color-user-bubble"])
+    ? "dark"
+    : "light";
+  const threadIcons = useThreadChipIcons(
+    props.environmentId,
+    bubbleAppearance,
+    liveText,
+    props.context?.records,
+  );
   const text = replaceComposerContextReferences(liveText, (ref) => {
     const available = props.context?.records.some((record) => record.contextId === ref.contextId);
     const label = available ? ref.label : gt("{label} (unavailable)", { label: ref.label });
